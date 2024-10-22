@@ -9,14 +9,16 @@
     <string name="upcoming_event_title_home">Upcoming Events</string>
 
 
-
-
     <string name="upcoming_event_name">Tech Conference 2024</string>
     <string name="upcoming_event_description">A conference about the latest technology trends.</string>
     <string name="upcoming_event_owner">Tech Innovators</string>
     <string name="upcoming_event_time">25th October 2024</string>
     <string name="upcoming_event_quota">Remaining Quota: 50</string>
     <string name="upcoming_event_city">Semarang</string>
+
+
+    <string name="open_event_link">Register</string>
+    <string name="event_image_cover">test</string>
 
     <string name="event_2_name">AI dan Machine Learning Expo</string>
     <string name="event_2_description">Explore the future of AI and machine learning.</string>
@@ -34,4 +36,6 @@
     <string name="event_finished_2_description">Learn about the latest in cloud computing technology.</string>
     <string name="event_finished_2_owner">Cloud Experts</string>
     <string name="event_finished_2_time">30th September 2023</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

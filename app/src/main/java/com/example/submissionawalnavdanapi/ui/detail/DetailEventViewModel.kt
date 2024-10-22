@@ -1,6 +1,6 @@
-package com.example.submissionawalnavdanapi.ui.upcoming
+package com.example.submissionawalnavdanapi.ui.detail
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,9 +11,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UpcomingViewModel : ViewModel() {
-    private val _upcomingEvents = MutableLiveData<List<ListEventsItem>>()
-    val upcomingEvents: LiveData<List<ListEventsItem>> = _upcomingEvents
+class DetailEventViewModel : ViewModel() {
+
+
+
+
+    // LiveData for holding the selected event details
+    private val _eventDetails = MutableLiveData<List<ListEventsItem>>()
+    val eventDetails: LiveData<List<ListEventsItem>> = _eventDetails
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -22,24 +27,23 @@ class UpcomingViewModel : ViewModel() {
     val error: LiveData<String?> = _error
 
     init {
-        fetchUpcomingEvents()
+
+        fetchEventDetails()
     }
 
-    private fun fetchUpcomingEvents() {
+    private fun fetchEventDetails() {
         _loading.value = true
-        val client = ApiConfig.getApiService().getUpcomingEvents()
+        val client = ApiConfig.getApiService().getEventDetails("1")
         client.enqueue(object : Callback<ResponseEvent> {
             override fun onResponse(call: Call<ResponseEvent>, response: Response<ResponseEvent>) {
-                _loading.value = false
                 if (response.isSuccessful) {
-                    _upcomingEvents.value = response.body()?.listEvents
+                    _eventDetails.value = response.body()?.listEvents
                 } else {
                     _error.value = "Failed to load events"
                 }
             }
 
             override fun onFailure(call: Call<ResponseEvent>, t: Throwable) {
-                _loading.value = false
                 _error.value = t.message
             }
         })

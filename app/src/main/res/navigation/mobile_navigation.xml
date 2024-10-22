@@ -15,11 +15,31 @@
         android:id="@+id/navigation_upcoming"
         android:name="com.example.submissionawalnavdanapi.ui.upcoming.UpcomingFragment"
         android:label="@string/title_upcoming"
-        tools:layout="@layout/fragment_upcoming" />
+        tools:layout="@layout/fragment_upcoming">
+        <action
+            android:id="@+id/action_navigation_upcoming_to_navigation_detail_event"
+            app:destination="@id/navigation_detail_event" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_finished"
         android:name="com.example.submissionawalnavdanapi.ui.finished.FinishedFragment"
         android:label="@string/title_finished"
-        tools:layout="@layout/fragment_finished" />
+        tools:layout="@layout/fragment_finished">
+        <action
+            android:id="@+id/action_navigation_finished_to_navigation_detail_event"
+            app:destination="@id/navigation_detail_event" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_detail_event"
+        android:name="com.example.submissionawalnavdanapi.ui.detail.DetailEventFragment"
+        android:label="Event Details"
+        tools:layout="@layout/fragment_detail_event">
+        <argument
+            android:name="selectedEvent"
+            app:argType="com.example.submissionawalnavdanapi.data.response.ListEventsItem"
+            app:nullable="true" />
+    </fragment>
+
 </navigation>

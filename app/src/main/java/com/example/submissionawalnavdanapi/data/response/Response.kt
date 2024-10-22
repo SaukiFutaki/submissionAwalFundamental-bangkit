@@ -1,8 +1,10 @@
 package com.example.submissionawalnavdanapi.data.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
-data class Response(
+data class ResponseEvent(
 	@field:SerializedName("listEvents")
 	val listEvents: List<ListEventsItem>,
 
@@ -13,6 +15,8 @@ data class Response(
 	val message: String
 )
 
+
+@Parcelize
 data class ListEventsItem(
 
 	@field:SerializedName("summary")
@@ -56,4 +60,4 @@ data class ListEventsItem(
 
 	@field:SerializedName("category")
 	val category: String
-)
+) : Parcelable

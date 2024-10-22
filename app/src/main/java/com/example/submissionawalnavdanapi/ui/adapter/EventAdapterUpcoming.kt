@@ -11,7 +11,7 @@ import com.example.submissionawalnavdanapi.databinding.ItemUpcomingEventBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class EventAdapterUpcoming : ListAdapter<ListEventsItem, EventAdapterUpcoming.EventViewHolder>(DIFF_CALLBACK) {
+class EventAdapterUpcoming(private val onItemClick: (ListEventsItem) -> Unit) : ListAdapter<ListEventsItem, EventAdapterUpcoming.EventViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
 
@@ -22,7 +22,12 @@ class EventAdapterUpcoming : ListAdapter<ListEventsItem, EventAdapterUpcoming.Ev
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
+
+        holder.itemView.setOnClickListener {
+            onItemClick(event)
+        }
     }
+
 
 
     class EventViewHolder(private val binding: ItemUpcomingEventBinding) : RecyclerView.ViewHolder(binding.root) {
