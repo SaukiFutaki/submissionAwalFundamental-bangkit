@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.submissionawalnavdanapi.data.response.ListEventsItem
 import com.example.submissionawalnavdanapi.databinding.ItemEventBinding
 
-class EventAdapter : ListAdapter<ListEventsItem, EventAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class EventAdapter(private val onItemClick: (ListEventsItem) -> Unit)  : ListAdapter<ListEventsItem, EventAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val binding = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,6 +19,10 @@ class EventAdapter : ListAdapter<ListEventsItem, EventAdapter.EventViewHolder>(D
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
+
+        holder.itemView.setOnClickListener {
+            onItemClick(event)
+        }
     }
 
     class EventViewHolder(private val binding: ItemEventBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -35,11 +39,11 @@ class EventAdapter : ListAdapter<ListEventsItem, EventAdapter.EventViewHolder>(D
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEventsItem>() {
             override fun areItemsTheSame(oldItem: ListEventsItem, newItem: ListEventsItem): Boolean {
-                return oldItem.id == newItem.id // Menggunakan ID untuk membandingkan item
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: ListEventsItem, newItem: ListEventsItem): Boolean {
-                return oldItem == newItem // Membandingkan konten
+                return oldItem == newItem
             }
         }
     }

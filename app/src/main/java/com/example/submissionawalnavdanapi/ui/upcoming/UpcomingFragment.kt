@@ -34,23 +34,29 @@ class UpcomingFragment : Fragment() {
 
         upcomingViewModel = ViewModelProvider(this).get(UpcomingViewModel::class.java)
 
+        setupRecyclerView()
+        observeViewModel()
+
+
+    }
+
+    private fun setupRecyclerView() {
         upcomingAdapter = EventAdapterUpcoming { event ->
             navigateToDetailEvent(event)
         }
+        binding.recyclerViewUpcoming.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = upcomingAdapter
+        }
+    }
 
-        binding.recyclerViewUpcoming.layoutManager = LinearLayoutManager(context)
-        binding.recyclerViewUpcoming.adapter = upcomingAdapter
-
+    private fun observeViewModel() {
         upcomingViewModel.upcomingEvents.observe(viewLifecycleOwner) { events ->
             upcomingAdapter.submitList(events)
         }
 
-        upcomingViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                binding.progressBar.visibility = View.VISIBLE
-            } else {
-                binding.progressBar.visibility = View.GONE
-            }
+        upcomingViewModel.loading.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
 
         upcomingViewModel.error.observe(viewLifecycleOwner) { errorMessage ->

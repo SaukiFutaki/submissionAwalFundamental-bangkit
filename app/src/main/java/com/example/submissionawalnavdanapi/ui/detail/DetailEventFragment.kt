@@ -51,6 +51,14 @@ class DetailEventFragment : Fragment() {
         val args: DetailEventFragmentArgs by navArgs()
         val event = args.selectedEvent
 
+        detailEventViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+        }
+
         event?.let {
             displayEventDetails(it)
         }
@@ -62,6 +70,9 @@ class DetailEventFragment : Fragment() {
         binding.tvEventLocation.text = "${event.cityName}"
        binding.tvEventTime.text = "${formatDateTime(event.beginTime)}"
         binding.tvEventCategory.text = "${event.category}"
+        binding.tvEventQuota.text = "${event.registrants}/${event.quota}"
+        binding.tvEventOwner.text = "${event.ownerName}"
+
         binding.tvEventDescription.text = HtmlCompat.fromHtml(
             event.description,
             HtmlCompat.FROM_HTML_MODE_LEGACY

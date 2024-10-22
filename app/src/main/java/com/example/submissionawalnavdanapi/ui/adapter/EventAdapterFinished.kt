@@ -11,7 +11,7 @@ import com.example.submissionawalnavdanapi.databinding.ItemFinishedEventBinding
 
 
 
-class EventAdapterFinished : ListAdapter<ListEventsItem, EventAdapterFinished.EventViewHolder>(DIFF_CALLBACK) {
+class EventAdapterFinished(private val onItemClick: (ListEventsItem) -> Unit) : ListAdapter<ListEventsItem, EventAdapterFinished.EventViewHolder>(DIFF_CALLBACK) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -22,6 +22,10 @@ class EventAdapterFinished : ListAdapter<ListEventsItem, EventAdapterFinished.Ev
     override fun onBindViewHolder(holder: EventAdapterFinished.EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
+
+        holder.itemView.setOnClickListener {
+            onItemClick(event)
+        }
     }
 
     class EventViewHolder(private val binding: ItemFinishedEventBinding) : RecyclerView.ViewHolder(binding.root) {

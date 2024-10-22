@@ -36,6 +36,7 @@ class DetailEventViewModel : ViewModel() {
         val client = ApiConfig.getApiService().getEventDetails("1")
         client.enqueue(object : Callback<ResponseEvent> {
             override fun onResponse(call: Call<ResponseEvent>, response: Response<ResponseEvent>) {
+                _loading.value = false
                 if (response.isSuccessful) {
                     _eventDetails.value = response.body()?.listEvents
                 } else {
@@ -44,6 +45,7 @@ class DetailEventViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<ResponseEvent>, t: Throwable) {
+                _loading.value = false
                 _error.value = t.message
             }
         })

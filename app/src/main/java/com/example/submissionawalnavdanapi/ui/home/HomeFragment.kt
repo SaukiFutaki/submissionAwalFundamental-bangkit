@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.submissionawalnavdanapi.data.response.ListEventsItem
 import com.example.submissionawalnavdanapi.databinding.FragmentHomeBinding
 import com.example.submissionawalnavdanapi.ui.adapter.EventAdapter
 
@@ -30,8 +32,12 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
 
-        upcomingAdapter = EventAdapter()
-        finishedAdapter = EventAdapter()
+        upcomingAdapter = EventAdapter{ event ->
+            navigateToDetailEvent(event)
+        }
+        finishedAdapter = EventAdapter{ event ->
+            navigateToDetailEvent(event)
+        }
 
 
         binding.recyclerViewUpcoming.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -44,6 +50,10 @@ class HomeFragment : Fragment() {
             upcomingAdapter.submitList(events.take(5))
         }
 
+        homeViewModel.loading.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
         homeViewModel.finishedEvents.observe(viewLifecycleOwner) { events ->
             finishedAdapter.submitList(events.take(5))
         }
@@ -51,8 +61,16 @@ class HomeFragment : Fragment() {
         return root
     }
 
+
+    private fun navigateToDetailEvent(event: ListEventsItem) {
+        val action = HomeFragmentDirections.actionNavigationHomeToNavigationDetailEvent(event)
+        findNavController().navigate(action)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
+// g tau bang

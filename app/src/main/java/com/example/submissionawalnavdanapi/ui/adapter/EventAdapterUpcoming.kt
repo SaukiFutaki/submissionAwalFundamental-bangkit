@@ -56,11 +56,11 @@ class EventAdapterUpcoming(private val onItemClick: (ListEventsItem) -> Unit) : 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEventsItem>() {
             override fun areItemsTheSame(oldItem: ListEventsItem, newItem: ListEventsItem): Boolean {
-                return oldItem.id == newItem.id // Use ID for comparison
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: ListEventsItem, newItem: ListEventsItem): Boolean {
-                return oldItem == newItem // Compare contents
+                return oldItem == newItem
             }
         }
     }

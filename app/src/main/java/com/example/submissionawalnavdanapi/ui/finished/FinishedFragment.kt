@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.submissionawalnavdanapi.data.response.ListEventsItem
 import com.example.submissionawalnavdanapi.databinding.FragmentFinishedBinding
 import com.example.submissionawalnavdanapi.ui.adapter.EventAdapterFinished
 
@@ -28,32 +30,43 @@ class FinishedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val finishedViewModel =
-            ViewModelProvider(this).get(FinishedViewModel::class.java)
-
         _binding = FragmentFinishedBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        finishedAdapter = EventAdapterFinished()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerViewFinished.layoutManager = GridLayoutManager(context,2)
-        binding.recyclerViewFinished.addItemDecoration(
-            GridSpacingItemDecoration(
-                spanCount = 2,
-                spacing = 16,
-                includeEdge = true
+        setupViewModel()
+        setupRecyclerView()
+        observeViewModel()
+    }
+
+    private fun setupViewModel() {
+        finishedViewModel = ViewModelProvider(this).get(FinishedViewModel::class.java)
+    }
+
+    private fun setupRecyclerView() {
+        finishedAdapter = EventAdapterFinished { event ->
+            navigateToDetailEvent(event)
+        }
+
+        binding.recyclerViewFinished.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            addItemDecoration(
+                GridSpacingItemDecoration(
+                    spanCount = 2,
+                    spacing = 16,
+                    includeEdge = true
+                )
             )
-        )
+            adapter = finishedAdapter
+        }
+    }
 
-
-        binding.recyclerViewFinished.adapter = finishedAdapter
-
+    private fun observeViewModel() {
         finishedViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                binding.progressBar.visibility = View.VISIBLE
-            } else {
-                binding.progressBar.visibility = View.GONE
-            }
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
         finishedViewModel.finishedEvents.observe(viewLifecycleOwner) { events ->
@@ -61,23 +74,25 @@ class FinishedFragment : Fragment() {
         }
 
         finishedViewModel.error.observe(viewLifecycleOwner) { error ->
-           error?.let {
-               Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-           }
+            error?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
         }
-
-
-
-        return root
     }
 
-
+    private fun navigateToDetailEvent(event: ListEventsItem) {
+        val action = FinishedFragmentDirections.actionNavigationFinishedToNavigationDetailEvent(event)
+        findNavController().navigate(action)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
+
+
 
 class GridSpacingItemDecoration(
     private val spanCount: Int,

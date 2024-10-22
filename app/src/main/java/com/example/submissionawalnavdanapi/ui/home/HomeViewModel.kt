@@ -20,42 +20,55 @@ class HomeViewModel : ViewModel() {
     private val _finishedEvents = MutableLiveData<List<ListEventsItem>>()
     val finishedEvents: LiveData<List<ListEventsItem>> = _finishedEvents
 
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
     init {
         fetchUpcomingEvents()
         fetchFinishedEvents()
     }
 
     private fun fetchUpcomingEvents() {
+        _loading.value = true
         val client = ApiConfig.getApiService().getUpcomingEvents()
         client.enqueue(object : Callback<ResponseEvent> {
+
             override fun onResponse(
                 call: Call<ResponseEvent>,
-                response: Response<ResponseEvent> // Fix type
+                response: Response<ResponseEvent>
             ) {
+                _loading.value = false
                 if (response.isSuccessful) {
-                    _upcomingEvents.value = response.body()?.listEvents // Updated to listEvents
+                    _upcomingEvents.value = response.body()?.listEvents
                 }
             }
 
             override fun onFailure(call: Call<ResponseEvent>, t: Throwable) {
+                _loading.value = false
                 Log.e("HomeViewModel", "onFailure: ${t.message.toString()}")
             }
         })
     }
 
     private fun fetchFinishedEvents() {
+        _loading.value = true
         val client = ApiConfig.getApiService().getFinishedEvents()
         client.enqueue(object : Callback<ResponseEvent> {
             override fun onResponse(
                 call: Call<ResponseEvent>,
-                response: Response<ResponseEvent> // Fix type
+                response: Response<ResponseEvent>
             ) {
+                _loading.value = false
                 if (response.isSuccessful) {
-                    _finishedEvents.value = response.body()?.listEvents // Updated to listEvents
+                    _finishedEvents.value = response.body()?.listEvents
                 }
             }
 
             override fun onFailure(call: Call<ResponseEvent>, t: Throwable) {
+                _loading.value = false
                 Log.e("HomeViewModel", "onFailure: ${t.message.toString()}")
             }
         })
