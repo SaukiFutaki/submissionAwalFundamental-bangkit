@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.submissionawalnavdanapi.data.response.ListEventsItem
 import com.example.submissionawalnavdanapi.databinding.ItemFinishedEventBinding
 
@@ -25,7 +26,11 @@ class EventAdapterFinished : ListAdapter<ListEventsItem, EventAdapterFinished.Ev
 
     class EventViewHolder(private val binding: ItemFinishedEventBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(event: ListEventsItem) {
-            binding.tvEventTitleFinished.text = event.name
+            binding.titleText.text = event.name
+            Glide.with(itemView.context)
+                .load(event.imageLogo)
+                .into(binding.imageView)
+
         }
 
     }
